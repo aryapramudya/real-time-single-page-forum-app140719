@@ -39,9 +39,12 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        Question::create($request->all());
+        //$request['slug'] = str_slug($request->title);
+        $question = auth()->user()->question()->create($request->all());
+        //Question::create($request->all());
         //return response()->json('Created',Response::HTTP_CREATED);
-        return response('Created',Response::HTTP_CREATED);
+        //return response('Created',Response::HTTP_CREATED);
+        return response(new QuestionResource($question),Response::HTTP_CREATED);
     }
 
     /**
@@ -65,7 +68,7 @@ class QuestionController extends Controller
     public function update(Request $request, Question $question)
     {
         $question->update($request->all());
-        return response()->json('Updated',Response::HTTP_ACCEPTED);
+        return response(null, Response::HTTP_ACCEPTED);
     }
 
     /**
@@ -73,10 +76,11 @@ class QuestionController extends Controller
      *
      * @param  \App\Question  $question
      * @return \Illuminate\Http\Response
-     */
+     */ 
+
     public function destroy(Question $question)
     {
         $question->delete();
-        return $response('Deleted', Respone::HTTP_NO_CONTENT);
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }
